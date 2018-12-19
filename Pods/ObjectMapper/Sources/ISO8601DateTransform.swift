@@ -1,7 +1,12 @@
 //
-//  HTTPMethod.swift
+//  ISO8601DateTransform.swift
+//  ObjectMapper
 //
-//  Copyright (c) 2014-2018 Alamofire Software Foundation (http://alamofire.org/)
+//  Created by Jean-Pierre Mouilleseaux on 21 Nov 2014.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014-2018 Tristan Himmelman
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -20,19 +25,23 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-//
 
-/// HTTP method definitions.
-///
-/// See https://tools.ietf.org/html/rfc7231#section-4.3
-public enum HTTPMethod: String {
-    case connect = "CONNECT"
-    case delete  = "DELETE"
-    case get     = "GET"
-    case head    = "HEAD"
-    case options = "OPTIONS"
-    case patch   = "PATCH"
-    case post    = "POST"
-    case put     = "PUT"
-    case trace   = "TRACE"
+import Foundation
+
+public extension DateFormatter {
+	public convenience init(withFormat format : String, locale : String) {
+		self.init()
+		self.locale = Locale(identifier: locale)
+		dateFormat = format
+	}
 }
+
+open class ISO8601DateTransform: DateFormatterTransform {
+	
+	static let reusableISODateFormatter = DateFormatter(withFormat: "yyyy-MM-dd'T'HH:mm:ssZZZZZ", locale: "en_US_POSIX")
+
+	public init() {
+		super.init(dateFormatter: ISO8601DateTransform.reusableISODateFormatter)
+	}
+}
+

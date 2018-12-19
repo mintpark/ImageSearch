@@ -1,7 +1,12 @@
 //
-//  OperationQueue+Alamofire.swift
+//  TransformType.swift
+//  ObjectMapper
 //
-//  Copyright (c) 2014-2018 Alamofire Software Foundation (http://alamofire.org/)
+//  Created by Syo Ikeda on 2/4/15.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014-2018 Tristan Himmelman
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +25,11 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-//
 
-import Foundation
+public protocol TransformType {
+	associatedtype Object
+	associatedtype JSON
 
-extension OperationQueue {
-    convenience init(qualityOfService: QualityOfService = .default,
-                     maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
-                     underlyingQueue: DispatchQueue? = nil,
-                     name: String? = nil,
-                     startSuspended: Bool = false) {
-        self.init()
-        self.qualityOfService = qualityOfService
-        self.maxConcurrentOperationCount = maxConcurrentOperationCount
-        self.underlyingQueue = underlyingQueue
-        self.name = name
-        self.isSuspended = startSuspended
-    }
+	func transformFromJSON(_ value: Any?) -> Object?
+	func transformToJSON(_ value: Object?) -> JSON?
 }

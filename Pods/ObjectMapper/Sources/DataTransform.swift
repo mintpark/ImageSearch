@@ -1,7 +1,12 @@
 //
-//  URLSessionConfiguration+Alamofire.swift
+//  DataTransform.swift
+//  ObjectMapper
 //
-//  Copyright (c) 2014-2018 Alamofire Software Foundation (http://alamofire.org/)
+//  Created by Yagrushkin, Evgeny on 8/30/16.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2014-2018 Tristan Himmelman
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -20,15 +25,26 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-//
 
 import Foundation
 
-extension URLSessionConfiguration {
-    public static var alamofireDefault: URLSessionConfiguration {
-        let configuration = URLSessionConfiguration.default
-        configuration.httpHeaders = .default
-
-        return configuration
-    }
+open class DataTransform: TransformType {
+	public typealias Object = Data
+	public typealias JSON = String
+	
+	public init() {}
+	
+	open func transformFromJSON(_ value: Any?) -> Data? {
+		guard let string = value as? String else{
+			return nil
+		}
+		return Data(base64Encoded: string)
+	}
+	
+	open func transformToJSON(_ value: Data?) -> String? {
+		guard let data = value else{
+			return nil
+		}
+		return data.base64EncodedString()
+	}
 }
