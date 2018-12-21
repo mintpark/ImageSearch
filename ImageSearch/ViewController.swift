@@ -13,11 +13,21 @@ import ObjectMapper
 
 let KAKAO_KEY = "KakaoAK 5248092dcdec8c23d39acfbc500df2d3"
 
+func MainScreen() -> CGSize {
+    return UIScreen.main.bounds.size
+}
+
 class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
+//    @IBOutlet weak var searchBar: UISearchBar!
+    var searchBar: UISearchBar!
     
-    var searchResults: [Document] = []
+    var searchResults: [Document] = [] {
+        didSet {
+            print("didset")
+            tableView.reloadData()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +35,11 @@ class ViewController: UIViewController {
         tableView.register(UINib(nibName: "SearchTableViewCell", bundle: nil), forCellReuseIdentifier: SearchTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.estimatedRowHeight = 100
+        
+        self.searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: MainScreen().width, height: 50))
+        self.searchBar.delegate = self
+        tableView.tableHeaderView = searchBar
         
         getJson(query: "설현")
     }
@@ -34,20 +49,14 @@ class ViewController: UIViewController {
         let parameters: Parameters = ["query": query, "size": 10]
         
         Alamofire.request("https://dapi.kakao.com/v2/search/image", method: .get, parameters: parameters, headers: headers).responseJSON { response in
-            
             guard let json = response.result.value as? [String: Any], let documents = json["documents"] as? [Any] else { return }
 
             do {
                 let mappedDocuments = try documents.map { (docu: Any) -> Document in
                     let data = try JSONSerialization.data(withJSONObject: docu, options: .prettyPrinted)
-                    if let jsonString = String(data: data, encoding: String.Encoding.utf8) {
-                        return Mapper<Document>().map(JSONString: jsonString) ?? Document(JSONString: "default")!
-                    } else {
-                        return Document(JSONString: "default")!
-                    }
+                    return Mapper<Document>().map(JSONString: String(data: data, encoding: String.Encoding.utf8) ?? "") ?? Document(JSONString: "default")!
                 }
                 self.searchResults = mappedDocuments
-                self.tableView.reloadData()
                 
             } catch {
                 print("error")
@@ -71,9 +80,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let document = searchResults[indexPath.row]
-        let imageRatio = document.height / document.width
+        let imageRatio = CGFloat(document.height) / CGFloat(document.width)
         
-//        return CGFloat(document.width * imageRatio)
-        return 100
+        return (MainScreen().width * imageRatio) / 2
     }
+}
+
+extension ViewController: UISearchBarDelegate {
+    
 }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		488E7917C0CC624AB721C1D6 /* Pods_ImageSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE57523AA12B03E3B8F1F1F /* Pods_ImageSearch.framework */; };
+		B0338E2121CD031700C92E81 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0338E1F21CD031700C92E81 /* SearchTableViewCell.swift */; };
+		B0338E2221CD031700C92E81 /* SearchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0338E2021CD031700C92E81 /* SearchTableViewCell.xib */; };
 		B03721FD21C9227800605DE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03721FC21C9227800605DE8 /* AppDelegate.swift */; };
 		B03721FF21C9227800605DE8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03721FE21C9227800605DE8 /* ViewController.swift */; };
 		B037220221C9227800605DE8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B037220021C9227800605DE8 /* Main.storyboard */; };
@@ -16,8 +18,6 @@
 		B037221221C9227A00605DE8 /* ImageSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037221121C9227A00605DE8 /* ImageSearchTests.swift */; };
 		B037221D21C9227A00605DE8 /* ImageSearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037221C21C9227A00605DE8 /* ImageSearchUITests.swift */; };
 		B0DC8EC921CBC80A00FB9485 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DC8EC821CBC80A00FB9485 /* Document.swift */; };
-		B0DC8ECC21CBC98100FB9485 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DC8ECA21CBC98100FB9485 /* SearchTableViewCell.swift */; };
-		B0DC8ECD21CBC98100FB9485 /* SearchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0DC8ECB21CBC98100FB9485 /* SearchTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +43,8 @@
 		24B8915A76AEDD67E45D11B9 /* Pods-ImageSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageSearch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImageSearch/Pods-ImageSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		554E4BD3842F67330043239A /* Pods_ImageSearchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageSearchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC562C81A8B20676D0A389E1 /* Pods_ImageSearchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageSearchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0338E1F21CD031700C92E81 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		B0338E2021CD031700C92E81 /* SearchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchTableViewCell.xib; sourceTree = "<group>"; };
 		B03721F921C9227800605DE8 /* ImageSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B03721FC21C9227800605DE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B03721FE21C9227800605DE8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -57,8 +59,6 @@
 		B037221C21C9227A00605DE8 /* ImageSearchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearchUITests.swift; sourceTree = "<group>"; };
 		B037221E21C9227A00605DE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0DC8EC821CBC80A00FB9485 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
-		B0DC8ECA21CBC98100FB9485 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
-		B0DC8ECB21CBC98100FB9485 /* SearchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,8 +138,8 @@
 				B037220321C9227A00605DE8 /* Assets.xcassets */,
 				B037220521C9227A00605DE8 /* LaunchScreen.storyboard */,
 				B037220821C9227A00605DE8 /* Info.plist */,
-				B0DC8ECA21CBC98100FB9485 /* SearchTableViewCell.swift */,
-				B0DC8ECB21CBC98100FB9485 /* SearchTableViewCell.xib */,
+				B0338E1F21CD031700C92E81 /* SearchTableViewCell.swift */,
+				B0338E2021CD031700C92E81 /* SearchTableViewCell.xib */,
 			);
 			path = ImageSearch;
 			sourceTree = "<group>";
@@ -269,7 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B037220721C9227A00605DE8 /* LaunchScreen.storyboard in Resources */,
-				B0DC8ECD21CBC98100FB9485 /* SearchTableViewCell.xib in Resources */,
+				B0338E2221CD031700C92E81 /* SearchTableViewCell.xib in Resources */,
 				B037220421C9227A00605DE8 /* Assets.xcassets in Resources */,
 				B037220221C9227800605DE8 /* Main.storyboard in Resources */,
 			);
@@ -340,7 +340,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B03721FF21C9227800605DE8 /* ViewController.swift in Sources */,
-				B0DC8ECC21CBC98100FB9485 /* SearchTableViewCell.swift in Sources */,
+				B0338E2121CD031700C92E81 /* SearchTableViewCell.swift in Sources */,
 				B03721FD21C9227800605DE8 /* AppDelegate.swift in Sources */,
 				B0DC8EC921CBC80A00FB9485 /* Document.swift in Sources */,
 			);
