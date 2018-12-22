@@ -19,12 +19,21 @@ func MainScreen() -> CGSize {
 
 class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-//    @IBOutlet weak var searchBar: UISearchBar!
     var searchBar: UISearchBar!
     var emptyMessageLabel: UILabel!
+    var timer: Timer?
     var searchActive: Bool = false {
         didSet {
             searchBar.resignFirstResponder()
+        }
+    }
+    var searchKeyword = "" {
+        didSet {
+            timer?.invalidate()
+            
+            if searchKeyword != "" {
+                timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startSearching), userInfo: nil, repeats: false)
+            }
         }
     }
     
@@ -55,6 +64,11 @@ class ViewController: UIViewController {
         tableView.backgroundView = emptyMessageLabel
     }
     
+    @objc fileprivate func startSearching() {
+        searchActive = false
+        fetchSearchData(query: searchKeyword)
+    }
+    
     fileprivate func fetchSearchData(query: String) {
         let headers: HTTPHeaders = ["Authorization": KAKAO_KEY]
         let parameters: Parameters = ["query": query, "size": 10]
@@ -82,11 +96,6 @@ class ViewController: UIViewController {
                 print("error")
             }
         }
-    }
-    
-    fileprivate func startSearching(text: String) {
-        searchActive = false
-        fetchSearchData(query: text)
     }
 }
 
@@ -119,10 +128,11 @@ extension ViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print("textDdiChange")
+        searchKeyword = searchText
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("search")
-        startSearching(text: searchBar.text ?? "")
+        startSearching()
     }
 }
