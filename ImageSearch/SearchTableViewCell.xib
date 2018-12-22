@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eJ9-e1-6Hb">
-                        <rect key="frame" x="0.0" y="0.0" width="326" height="153.5"/>
+                        <rect key="frame" x="2" y="0.0" width="322" height="151.5"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vdb-4w-dHK">
                         <rect key="frame" x="142" y="120.5" width="42" height="21"/>
@@ -32,10 +32,10 @@
                 <constraints>
                     <constraint firstItem="vdb-4w-dHK" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="BiI-sq-e4W"/>
                     <constraint firstItem="eJ9-e1-6Hb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="FmL-8X-eaG"/>
-                    <constraint firstAttribute="bottom" secondItem="eJ9-e1-6Hb" secondAttribute="bottom" id="GZF-yd-ydU"/>
-                    <constraint firstItem="eJ9-e1-6Hb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="NbO-lb-H1j"/>
+                    <constraint firstAttribute="bottom" secondItem="eJ9-e1-6Hb" secondAttribute="bottom" constant="2" id="GZF-yd-ydU"/>
+                    <constraint firstItem="eJ9-e1-6Hb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="2" id="NbO-lb-H1j"/>
                     <constraint firstAttribute="bottom" secondItem="vdb-4w-dHK" secondAttribute="bottom" constant="12" id="Ngw-xL-TSk"/>
-                    <constraint firstAttribute="trailing" secondItem="eJ9-e1-6Hb" secondAttribute="trailing" id="vuP-bE-6Xu"/>
+                    <constraint firstAttribute="trailing" secondItem="eJ9-e1-6Hb" secondAttribute="trailing" constant="2" id="vuP-bE-6Xu"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

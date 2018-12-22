@@ -22,13 +22,26 @@ class ViewController: UIViewController {
     var searchBar: UISearchBar!
     var emptyMessageLabel: UILabel!
     var timer: Timer?
+    
+    var page: Int = 5
+    
+    var refreshControl: UIRefreshControl = {
+        let refreshCtrl = UIRefreshControl()
+        refreshCtrl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        
+        return refreshCtrl
+    }()
+    
     var searchActive: Bool = false {
         didSet {
             searchBar.resignFirstResponder()
         }
     }
+    
     var searchKeyword = "" {
         didSet {
+            page = 1
+            searchResults = []
             timer?.invalidate()
             
             if searchKeyword != "" {
@@ -37,12 +50,7 @@ class ViewController: UIViewController {
         }
     }
     
-    var searchResults: [Document] = [] {
-        didSet {
-            print("didset")
-            tableView.reloadData()
-        }
-    }
+    var searchResults: [Document] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,16 +70,23 @@ class ViewController: UIViewController {
         emptyMessageLabel.numberOfLines = 0
         emptyMessageLabel.textAlignment = .center
         tableView.backgroundView = emptyMessageLabel
+        
+        tableView.addSubview(refreshControl)
+    }
+    
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
+        tableView.reloadData()
+        refreshControl.endRefreshing()
     }
     
     @objc fileprivate func startSearching() {
         searchActive = false
-        fetchSearchData(query: searchKeyword)
+        fetchSearchData(query: searchKeyword, page: page)
     }
     
-    fileprivate func fetchSearchData(query: String) {
+    fileprivate func fetchSearchData(query: String, page: Int) {
         let headers: HTTPHeaders = ["Authorization": KAKAO_KEY]
-        let parameters: Parameters = ["query": query, "size": 10]
+        let parameters: Parameters = ["query": query, "size": 20, "page": page]
         
         Alamofire.request("https://dapi.kakao.com/v2/search/image", method: .get, parameters: parameters, headers: headers).responseJSON { response in
             guard let json = response.result.value as? [String: Any], let documents = json["documents"] as? [Any] else {
@@ -88,9 +103,13 @@ class ViewController: UIViewController {
             do {
                 let mappedDocuments = try documents.map { (docu: Any) -> Document in
                     let data = try JSONSerialization.data(withJSONObject: docu, options: .prettyPrinted)
-                    return Mapper<Document>().map(JSONString: String(data: data, encoding: String.Encoding.utf8) ?? "") ?? Document(JSONString: "default")!
+                    let item = Mapper<Document>().map(JSONString: String(data: data, encoding: String.Encoding.utf8) ?? "") ?? Document(JSONString: "default")!
+                    
+                    print(item.imageUrl)
+                    return item
                 }
-                self.searchResults = mappedDocuments
+                self.searchResults.append(contentsOf: mappedDocuments)
+                self.tableView.reloadData()
                 
             } catch {
                 print("error")
@@ -117,6 +136,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let imageRatio = CGFloat(document.height) / CGFloat(document.width)
         
         return (MainScreen().width * imageRatio) / 2
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == searchResults.count - 2 {
+            page += 1
+            fetchSearchData(query: searchKeyword, page: page)
+        }
     }
 }
 
