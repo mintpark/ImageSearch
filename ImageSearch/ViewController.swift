@@ -22,6 +22,11 @@ class ViewController: UIViewController {
 //    @IBOutlet weak var searchBar: UISearchBar!
     var searchBar: UISearchBar!
     var emptyMessageLabel: UILabel!
+    var searchActive: Bool = false {
+        didSet {
+            searchBar.resignFirstResponder()
+        }
+    }
     
     var searchResults: [Document] = [] {
         didSet {
@@ -40,18 +45,17 @@ class ViewController: UIViewController {
         
         searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: MainScreen().width, height: 50))
         searchBar.delegate = self
+        searchBar.setShowsCancelButton(true, animated: true)
         tableView.tableHeaderView = searchBar
         
         emptyMessageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: tableView.bounds.height))
-        emptyMessageLabel.text = "init empty message label"
+        emptyMessageLabel.text = "이미지 검색을 시작해보세요."
         emptyMessageLabel.numberOfLines = 0
         emptyMessageLabel.textAlignment = .center
         tableView.backgroundView = emptyMessageLabel
-        
-        getJson(query: "설현")
     }
     
-    func getJson(query: String) {
+    fileprivate func fetchSearchData(query: String) {
         let headers: HTTPHeaders = ["Authorization": KAKAO_KEY]
         let parameters: Parameters = ["query": query, "size": 10]
         
@@ -62,6 +66,8 @@ class ViewController: UIViewController {
                 } else {
                     self.emptyMessageLabel.text = "알 수 없는 에러입니다. \n네트워크 상태를 확인하시고 다시 시도해 주세요."
                 }
+                self.searchResults = []
+                self.tableView.reloadData()
                 return
             }
 
@@ -76,6 +82,11 @@ class ViewController: UIViewController {
                 print("error")
             }
         }
+    }
+    
+    fileprivate func startSearching(text: String) {
+        searchActive = false
+        fetchSearchData(query: text)
     }
 }
 
@@ -101,5 +112,17 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ViewController: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("cancle")
+        searchActive = false
+    }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("textDdiChange")
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("search")
+        startSearching(text: searchBar.text ?? "")
+    }
 }

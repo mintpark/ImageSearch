@@ -33,7 +33,7 @@ class SearchTableViewCell: UITableViewCell {
         searchImageView.kf.setImage(with: url, options: [.transition(.fade(0.2))]) { result in
             switch result {
             case .success(let value):
-                print(value.image.size.height)
+                break
             case .failure(let error):
                 print(error)
             }
