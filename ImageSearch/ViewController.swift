@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 //    @IBOutlet weak var searchBar: UISearchBar!
     var searchBar: UISearchBar!
+    var emptyMessageLabel: UILabel!
     
     var searchResults: [Document] = [] {
         didSet {
@@ -37,9 +38,15 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.estimatedRowHeight = 100
         
-        self.searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: MainScreen().width, height: 50))
-        self.searchBar.delegate = self
+        searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: MainScreen().width, height: 50))
+        searchBar.delegate = self
         tableView.tableHeaderView = searchBar
+        
+        emptyMessageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: tableView.bounds.height))
+        emptyMessageLabel.text = "init empty message label"
+        emptyMessageLabel.numberOfLines = 0
+        emptyMessageLabel.textAlignment = .center
+        tableView.backgroundView = emptyMessageLabel
         
         getJson(query: "설현")
     }
@@ -49,7 +56,14 @@ class ViewController: UIViewController {
         let parameters: Parameters = ["query": query, "size": 10]
         
         Alamofire.request("https://dapi.kakao.com/v2/search/image", method: .get, parameters: parameters, headers: headers).responseJSON { response in
-            guard let json = response.result.value as? [String: Any], let documents = json["documents"] as? [Any] else { return }
+            guard let json = response.result.value as? [String: Any], let documents = json["documents"] as? [Any] else {
+                if response.response?.statusCode == 500 {
+                    self.emptyMessageLabel.text = "\(query)에 관한 검색결과가 없습니다."
+                } else {
+                    self.emptyMessageLabel.text = "알 수 없는 에러입니다. \n네트워크 상태를 확인하시고 다시 시도해 주세요."
+                }
+                return
+            }
 
             do {
                 let mappedDocuments = try documents.map { (docu: Any) -> Document in
