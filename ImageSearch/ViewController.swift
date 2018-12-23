@@ -58,6 +58,7 @@ class ViewController: UIViewController {
         tableView.register(UINib(nibName: "SearchTableViewCell", bundle: nil), forCellReuseIdentifier: SearchTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.prefetchDataSource = self
         tableView.estimatedRowHeight = 100
         
         searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: MainScreen().width, height: 50))
@@ -104,8 +105,6 @@ class ViewController: UIViewController {
                 let mappedDocuments = try documents.map { (docu: Any) -> Document in
                     let data = try JSONSerialization.data(withJSONObject: docu, options: .prettyPrinted)
                     let item = Mapper<Document>().map(JSONString: String(data: data, encoding: String.Encoding.utf8) ?? "") ?? Document(JSONString: "default")!
-                    
-                    print(item.imageUrl)
                     return item
                 }
                 self.searchResults.append(contentsOf: mappedDocuments)
@@ -118,8 +117,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
-    
+extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
     }
@@ -143,6 +141,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             page += 1
             fetchSearchData(query: searchKeyword, page: page)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let startIndex = indexPaths.first?.row, let lastIndex = indexPaths.last?.row else { return }
+        
+        let urls = searchResults.enumerated().compactMap({ (index, document) -> URL? in
+            if startIndex <= index, lastIndex >= index,
+                let urlStr = document.imageUrl, let url = URL(string: urlStr) {
+                return url
+            } else {
+                return nil
+            }
+        })
+        ImagePrefetcher(urls: urls).start()
     }
 }
 
