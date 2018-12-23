@@ -17,28 +17,28 @@ func MainScreen() -> CGSize {
     return UIScreen.main.bounds.size
 }
 
-class ViewController: UIViewController {
+class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    var searchBar: UISearchBar!
-    var emptyMessageLabel: UILabel!
-    var timer: Timer?
+    private var searchBar: UISearchBar!
+    private var emptyMessageLabel: UILabel!
+    private var timer: Timer?
     
-    var page: Int = 5
+    private var page: Int = 5
     
-    var refreshControl: UIRefreshControl = {
+    lazy var refreshControl: UIRefreshControl = {
         let refreshCtrl = UIRefreshControl()
         refreshCtrl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         
         return refreshCtrl
     }()
     
-    var searchActive: Bool = false {
+    private var searchActive: Bool = false {
         didSet {
             searchBar.resignFirstResponder()
         }
     }
     
-    var searchKeyword = "" {
+    private var searchKeyword = "" {
         didSet {
             page = 1
             searchResults = []
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
         }
     }
     
-    var searchResults: [Document] = []
+    private var searchResults: [Document] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +75,7 @@ class ViewController: UIViewController {
         tableView.addSubview(refreshControl)
     }
     
-    @objc func refresh(_ refreshControl: UIRefreshControl) {
+    @objc fileprivate func refresh(_ refreshControl: UIRefreshControl) {
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
@@ -117,7 +117,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
     }
@@ -158,7 +158,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableVie
     }
 }
 
-extension ViewController: UISearchBarDelegate {
+extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         print("cancle")
         searchActive = false
