@@ -28,21 +28,45 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iqO-DR-3fl">
                                 <rect key="frame" x="0.0" y="70" width="375" height="632"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3jq-fs-AcA" userLabel="Message View">
+                                <rect key="frame" x="0.0" y="70" width="375" height="632"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이미지 검색을 시작해보세요." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R1l-pJ-PjN">
+                                        <rect key="frame" x="50" y="307" width="275" height="18"/>
+                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="R1l-pJ-PjN" firstAttribute="centerY" secondItem="3jq-fs-AcA" secondAttribute="centerY" id="Gvx-47-Ukd"/>
+                                    <constraint firstItem="R1l-pJ-PjN" firstAttribute="leading" secondItem="3jq-fs-AcA" secondAttribute="leading" constant="50" id="Zz8-cu-rqV"/>
+                                    <constraint firstAttribute="trailing" secondItem="R1l-pJ-PjN" secondAttribute="trailing" constant="50" id="nzT-LW-FXk"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="mDw-ik-rdz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1Ua-Rb-zU0"/>
-                            <constraint firstItem="mDw-ik-rdz" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="37n-RB-wpO"/>
-                            <constraint firstItem="iqO-DR-3fl" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="5lE-fb-NbL"/>
-                            <constraint firstItem="iqO-DR-3fl" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="35" id="68O-gD-LXk"/>
-                            <constraint firstItem="iqO-DR-3fl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GYt-EP-2Y2"/>
-                            <constraint firstItem="iqO-DR-3fl" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="brC-3k-sQ5"/>
-                            <constraint firstItem="mDw-ik-rdz" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="fwa-Yw-d7T"/>
+                            <constraint firstItem="3jq-fs-AcA" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="35" id="5aO-RD-1HR"/>
+                            <constraint firstItem="iqO-DR-3fl" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="B9q-ei-oAl"/>
+                            <constraint firstItem="mDw-ik-rdz" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="BlG-q4-pgF"/>
+                            <constraint firstItem="mDw-ik-rdz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FOm-fF-sm2"/>
+                            <constraint firstItem="iqO-DR-3fl" firstAttribute="top" secondItem="mDw-ik-rdz" secondAttribute="bottom" id="JgW-cs-cD8"/>
+                            <constraint firstItem="3jq-fs-AcA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="MZ9-5V-pbD"/>
+                            <constraint firstItem="iqO-DR-3fl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="P2p-QX-U85"/>
+                            <constraint firstItem="3jq-fs-AcA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Pw5-Cr-Aqz"/>
+                            <constraint firstItem="mDw-ik-rdz" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="QeT-d0-oc6"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iqO-DR-3fl" secondAttribute="bottom" constant="-35" id="QfB-cI-0Ow"/>
+                            <constraint firstItem="3jq-fs-AcA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="hHo-R0-oya"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="messageLabel" destination="R1l-pJ-PjN" id="IZ1-dt-vRn"/>
+                        <outlet property="messageView" destination="3jq-fs-AcA" id="r75-Wu-Uq4"/>
                         <outlet property="searchBar" destination="mDw-ik-rdz" id="eId-1a-rNJ"/>
                         <outlet property="tableView" destination="iqO-DR-3fl" id="sup-2O-iab"/>
                     </connections>

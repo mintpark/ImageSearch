@@ -26,10 +26,12 @@ struct SearchViewModel {
 class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    private var emptyMessageLabel: UILabel!
     private var timer: Timer?
     
-    private var page: Int = 5
+    @IBOutlet weak var messageView: UIView!
+    @IBOutlet weak var messageLabel: UILabel!
+    
+    private var page: Int = 1
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshCtrl = UIRefreshControl()
@@ -46,8 +48,6 @@ class SearchViewController: UIViewController {
     
     private var searchKeyword = "" {
         didSet {
-            page = 1
-            searchResults = []
             timer?.invalidate()
             
             if searchKeyword != "" {
@@ -70,12 +70,6 @@ class SearchViewController: UIViewController {
         searchBar.delegate = self
         searchBar.setShowsCancelButton(true, animated: true)
         
-        emptyMessageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: tableView.bounds.height))
-        emptyMessageLabel.text = "이미지 검색을 시작해보세요."
-        emptyMessageLabel.numberOfLines = 0
-        emptyMessageLabel.textAlignment = .center
-        tableView.backgroundView = emptyMessageLabel
-        
         tableView.addSubview(refreshControl)
     }
     
@@ -85,6 +79,8 @@ class SearchViewController: UIViewController {
     }
     
     @objc fileprivate func startSearching() {
+        page = 1
+        searchResults = []
         searchActive = false
         fetchSearchData(query: searchKeyword, page: page)
     }
@@ -95,17 +91,21 @@ class SearchViewController: UIViewController {
         
         Alamofire.request("https://dapi.kakao.com/v2/search/image", method: .get, parameters: parameters, headers: headers).responseJSON { response in
             guard let json = response.result.value as? [String: Any], let documents = json["documents"] as? [Any] else {
-                if response.response?.statusCode == 500 {
-                    self.emptyMessageLabel.text = "\(query)에 관한 검색결과가 없습니다."
-                } else {
-                    self.emptyMessageLabel.text = "알 수 없는 에러입니다. \n네트워크 상태를 확인하시고 다시 시도해 주세요."
-                }
+                self.messageView.isHidden = false
+                self.messageLabel.text = "알 수 없는 에러입니다. \n네트워크 상태를 확인하시고 다시 시도해 주세요."
                 self.searchResults = []
                 self.tableView.reloadData()
                 return
             }
-
+            
+            if documents.count == 0 {
+                self.messageView.isHidden = false
+                self.messageLabel.text = "\(query)에 관한 검색결과가 없습니다."
+                return
+            }
+            
             do {
+                self.messageView.isHidden = true
                 let mappedDocuments = try documents.compactMap { (docu: Any) -> SearchViewModel? in
                     let data = try JSONSerialization.data(withJSONObject: docu, options: .prettyPrinted)
                     if let item = Mapper<Document>().map(JSONString: String(data: data, encoding: String.Encoding.utf8) ?? ""),
@@ -130,21 +130,23 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell, indexPath.row < searchResults.count else { return UITableViewCell() }
         cell.viewModel = searchResults[indexPath.row]
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if searchResults.count <= indexPath.row { return 0 }
+        
         let document = searchResults[indexPath.row]
         let imageRatio = CGFloat(document.height) / CGFloat(document.width)
         
-        return (MainScreen().width * imageRatio) / 2
+        return (MainScreen().width * imageRatio)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == searchResults.count - 2 {
+        if indexPath.row == searchResults.count - 2, searchKeyword != "" {
             page += 1
             fetchSearchData(query: searchKeyword, page: page)
         }
@@ -166,17 +168,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource, UITa
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("cancle")
         searchActive = false
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("textDdiChange")
         searchKeyword = searchText
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("search")
         startSearching()
     }
 }
