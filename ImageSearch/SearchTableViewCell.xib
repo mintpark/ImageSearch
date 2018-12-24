@@ -19,15 +19,15 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eJ9-e1-6Hb">
-                        <rect key="frame" x="2" y="0.0" width="322" height="151.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="326" height="153.5"/>
                     </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="eJ9-e1-6Hb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="FmL-8X-eaG"/>
-                    <constraint firstAttribute="bottom" secondItem="eJ9-e1-6Hb" secondAttribute="bottom" constant="2" id="GZF-yd-ydU"/>
-                    <constraint firstItem="eJ9-e1-6Hb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="2" id="NbO-lb-H1j"/>
-                    <constraint firstAttribute="trailing" secondItem="eJ9-e1-6Hb" secondAttribute="trailing" constant="2" id="vuP-bE-6Xu"/>
+                    <constraint firstAttribute="bottom" secondItem="eJ9-e1-6Hb" secondAttribute="bottom" id="GZF-yd-ydU"/>
+                    <constraint firstItem="eJ9-e1-6Hb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="NbO-lb-H1j"/>
+                    <constraint firstAttribute="trailing" secondItem="eJ9-e1-6Hb" secondAttribute="trailing" id="vuP-bE-6Xu"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
