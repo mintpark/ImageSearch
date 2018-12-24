@@ -19,7 +19,7 @@ func MainScreen() -> CGSize {
 
 class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    private var searchBar: UISearchBar!
+    @IBOutlet weak var searchBar: UISearchBar!
     private var emptyMessageLabel: UILabel!
     private var timer: Timer?
     
@@ -61,10 +61,8 @@ class SearchViewController: UIViewController {
         tableView.prefetchDataSource = self
         tableView.estimatedRowHeight = 100
         
-        searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: MainScreen().width, height: 50))
         searchBar.delegate = self
         searchBar.setShowsCancelButton(true, animated: true)
-        tableView.tableHeaderView = searchBar
         
         emptyMessageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: tableView.bounds.height))
         emptyMessageLabel.text = "이미지 검색을 시작해보세요."
