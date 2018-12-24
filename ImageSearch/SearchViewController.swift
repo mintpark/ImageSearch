@@ -17,6 +17,12 @@ func MainScreen() -> CGSize {
     return UIScreen.main.bounds.size
 }
 
+struct SearchViewModel {
+    var height: Int
+    var width: Int
+    var imageUrl: URL
+}
+
 class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -50,7 +56,7 @@ class SearchViewController: UIViewController {
         }
     }
     
-    private var searchResults: [Document] = []
+    private var searchResults: [SearchViewModel] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,10 +106,13 @@ class SearchViewController: UIViewController {
             }
 
             do {
-                let mappedDocuments = try documents.map { (docu: Any) -> Document in
+                let mappedDocuments = try documents.compactMap { (docu: Any) -> SearchViewModel? in
                     let data = try JSONSerialization.data(withJSONObject: docu, options: .prettyPrinted)
-                    let item = Mapper<Document>().map(JSONString: String(data: data, encoding: String.Encoding.utf8) ?? "") ?? Document(JSONString: "default")!
-                    return item
+                    if let item = Mapper<Document>().map(JSONString: String(data: data, encoding: String.Encoding.utf8) ?? ""),
+                        let url = URL(string: item.imageUrl) {
+                        return SearchViewModel(height: item.height, width: item.width, imageUrl: url)
+                    }
+                    return nil
                 }
                 self.searchResults.append(contentsOf: mappedDocuments)
                 self.tableView.reloadData()
@@ -122,7 +131,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource, UITa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
-        cell.document = searchResults[indexPath.row]
+        cell.viewModel = searchResults[indexPath.row]
         
         return cell
     }
@@ -144,10 +153,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard let startIndex = indexPaths.first?.row, let lastIndex = indexPaths.last?.row else { return }
         
-        let urls = searchResults.enumerated().compactMap({ (index, document) -> URL? in
-            if startIndex <= index, lastIndex >= index,
-                let urlStr = document.imageUrl, let url = URL(string: urlStr) {
-                return url
+        let urls = searchResults.enumerated().compactMap({ (index, searchResult) -> URL? in
+            if startIndex <= index, lastIndex >= index {
+                return searchResult.imageUrl
             } else {
                 return nil
             }

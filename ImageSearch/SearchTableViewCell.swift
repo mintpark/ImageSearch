@@ -10,14 +10,13 @@ import UIKit
 
 class SearchTableViewCell: UITableViewCell {
     static let identifier = "SearchTableViewCell"
-    var document: Document? {
+    var viewModel: SearchViewModel? {
         didSet {
-            bindData(document: self.document)
+            bind(viewModel: self.viewModel)
         }
     }
     
     @IBOutlet weak var searchImageView: UIImageView!
-    @IBOutlet weak var testLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,12 +24,11 @@ class SearchTableViewCell: UITableViewCell {
         searchImageView.contentMode = .scaleAspectFit
     }
     
-    fileprivate func bindData(document: Document?) {
-        guard let document = document, let urlStr = document.imageUrl, let url = URL(string: urlStr) else { return }
-        testLabel.text = document.sitename
+    fileprivate func bind(viewModel: SearchViewModel?) {
+        guard let viewModel = viewModel else { return }
         
         searchImageView.kf.indicatorType = .activity
-        searchImageView.kf.setImage(with: url, options: [.transition(.fade(0.2))]) { result in
+        searchImageView.kf.setImage(with: viewModel.imageUrl, options: [.transition(.fade(0.2))]) { result in
             switch result {
             case .success(let value):
                 break
@@ -38,7 +36,6 @@ class SearchTableViewCell: UITableViewCell {
                 print(error)
             }
         }
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
